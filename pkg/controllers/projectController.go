@@ -39,9 +39,8 @@ func UpdateProject(c *gin.Context) (err error) {
 	if err != nil {
 		return
 	}
-	
 	// Update the project in the database
-	err = repository.UpdateProject(projectID, project)
+	err = repository.UpdateProject(projectID-1, project)
 	if err != nil {
 		return errors.New("error occurred while updating project")
 	}
