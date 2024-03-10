@@ -44,7 +44,7 @@ func CreateUser(user models.User) (err error) {
 }
 
 // Function that returns the count of users with a given email from the database
-func CountUsersByEmail(email *string) (count int64, err error) {
+func CountUsersByEmail(email string) (count int64, err error) {
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 
@@ -53,11 +53,11 @@ func CountUsersByEmail(email *string) (count int64, err error) {
 }
 
 // Function that returns a user object from the database using their email
-func GetUserByEmail(email *string) (foundUser models.User, err error) {
+func GetUserByEmail(email string) (foundUser models.User, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 
-	err = userCollection.FindOne(ctx, bson.M{"email": *email}).Decode(&foundUser)
+	err = userCollection.FindOne(ctx, bson.M{"email": email}).Decode(&foundUser)
 
 	return
 }
