@@ -17,6 +17,14 @@
 - `POST /create-project`: Create a new project.
 - `PUT /update-project/:id`: Update an existing project. Requires admin privileges.
 
+#### Admin data
+```json
+{
+  "email": "chingizkhan@gmail.com",
+  "password": "123123"
+}
+```
+
 ## Running the Application
 
 To run the application, execute the following command in your terminal:
