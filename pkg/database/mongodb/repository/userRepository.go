@@ -39,6 +39,7 @@ func CreateUser(user models.User) (err error) {
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 	_, err = userCollection.InsertOne(ctx, user)
+
 	return
 }
 
@@ -59,4 +60,23 @@ func GetUserByEmail(email *string) (foundUser models.User, err error) {
 	err = userCollection.FindOne(ctx, bson.M{"email": *email}).Decode(&foundUser)
 
 	return
+}
+
+func UpdateUser(user models.User) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	filter := bson.M{"email": user.Email} // Use the user's unique ID as the filter
+
+	update := bson.M{
+		"$set": bson.M{
+			"name":          user.Name,
+			"number":        user.Number,
+			"date_of_birth": user.DateOfBirth,
+		},
+	}
+
+	_, err := userCollection.UpdateOne(ctx, filter, update)
+
+	return err
 }
