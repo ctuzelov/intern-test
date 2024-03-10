@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"auth-service/pkg/utils"
-	"fmt"
 	"net/http"
 	"strings"
 
