@@ -3,6 +3,7 @@ package middleware
 import (
 	"auth-service/pkg/utils"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,7 +11,10 @@ import (
 func IsAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Retrieve the user's JWT token from the request header
-		clientToken := c.Request.Header.Get("token")
+		authorizationHeader := c.GetHeader("Authorization")
+		splitToken := strings.Split(authorizationHeader, " ")
+
+		clientToken := splitToken[1]
 		if clientToken == "" {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "No authorization header provided"})
 			c.Abort()

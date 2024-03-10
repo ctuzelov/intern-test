@@ -2,7 +2,9 @@ package middleware
 
 import (
 	"auth-service/pkg/utils"
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,7 +12,10 @@ import (
 // Function used as middleware authentication to check on authorization token and proceed with the request if valid
 func Authenticate() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		clientToken := c.Request.Header.Get("token")
+		authorizationHeader := c.GetHeader("Authorization")
+		splitToken := strings.Split(authorizationHeader, " ")
+
+		clientToken := splitToken[1]
 		if clientToken == "" {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "No authorization header provided"})
 			c.Abort()
