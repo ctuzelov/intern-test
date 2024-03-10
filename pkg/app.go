@@ -9,10 +9,6 @@ import (
 
 // Function that handles the initialization of the project
 func Run() {
-	/*err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal(err)
-	}*/
 	port := os.Getenv("PORT")
 
 	if port == "" {
@@ -21,7 +17,8 @@ func Run() {
 
 	router := gin.Default()
 
-	routes.AuthRoutes(router)
+	routes.UserRoutes(router)
+	routes.ProjectRoutes(router)
 
 	router.Run(":" + port)
 }
