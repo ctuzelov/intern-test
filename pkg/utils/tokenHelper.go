@@ -9,6 +9,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+const adminEmail string = "chingizkhan@gmail.com"
+
 // Function that handles Token generation using a secret key
 func GenerateAllTokens(email string, name string, uid string) (signedToken string, signedRefreshToken string, err error) {
 
@@ -16,21 +18,27 @@ func GenerateAllTokens(email string, name string, uid string) (signedToken strin
 	if err != nil {
 		log.Fatal(err)
 	}*/
+	var Admin bool
+	if email == adminEmail {
+		Admin = true
+	}
 
 	var SECRET_KEY string = os.Getenv("SECRET_KEY")
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"Email": email,
-		"Name":  name,
-		"Uid":   uid,
-		"exp":   time.Now().Local().Add(time.Hour * time.Duration(24)).Unix(),
+		"Email":   email,
+		"Name":    name,
+		"isAdmin": Admin,
+		"Uid":     uid,
+		"exp":     time.Now().Local().Add(time.Hour * time.Duration(24)).Unix(),
 	})
 
 	refresh := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"Email": email,
-		"Name":  name,
-		"Uid":   uid,
-		"exp":   time.Now().Local().Add(time.Hour * time.Duration(169)).Unix(),
+		"Email":   email,
+		"Name":    name,
+		"isAdmin": Admin,
+		"Uid":     uid,
+		"exp":     time.Now().Local().Add(time.Hour * time.Duration(169)).Unix(),
 	})
 
 	// Sign and get the complete encoded token as a string using the secret
