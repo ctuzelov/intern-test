@@ -7,7 +7,7 @@ ENV GO111MODULE=on \
     GOOS=linux \
     GOARCH=amd64 \
     PORT=8080 \
-    MONGODB_URL=mongodb+srv://MoZaki:thisIsASecret@organizationmanager.m1dpzkn.mongodb.net/?retryWrites=true&w=majority \
+    MONGODB_URL=mongodb+srv://intern:thisIsASecret@project.kztfp6h.mongodb.net/?retryWrites=true&w=majority&appName=project \
     SECRET_KEY=thisIsASecret
 
 # Set the Current Working Directory inside the container
