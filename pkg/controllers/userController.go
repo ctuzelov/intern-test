@@ -29,18 +29,18 @@ func SignUp(c *gin.Context) (err error) {
 		return
 	}
 
-	password := utils.HashPassword(*user.Password) // Hash password for the user
-	user.Password = &password
+	password := utils.HashPassword(user.Password) // Hash password for the user
+	user.Password = password
 	user.ID = primitive.NewObjectID()
 	user.User_id = user.ID.Hex()
-	token, refreshToken, err := utils.GenerateAllTokens(*user.Email, *user.Name, user.User_id)
+	token, refreshToken, err := utils.GenerateAllTokens(user.Email, user.Name, user.User_id)
 
 	if err != nil {
 		err = errors.New("error occured generating tokens")
 		return
 	}
-	user.Token = &token
-	user.Refresh_Token = &refreshToken
+	user.Token = token
+	user.Refresh_Token = refreshToken
 	err = repository.CreateUser(user)
 
 	return
@@ -59,13 +59,13 @@ func Login(c *gin.Context) (token string, refreshToken string, err error) {
 	if err != nil {
 		return
 	}
-	passwordIsValid, msg := utils.VerifyPassword(*user.Password, *foundUser.Password)
+	passwordIsValid, msg := utils.VerifyPassword(user.Password, foundUser.Password)
 
 	if !passwordIsValid {
 		err = errors.New(msg)
 		return
 	}
-	token, refreshToken, err = utils.GenerateAllTokens(*foundUser.Email, *foundUser.Name, foundUser.User_id)
+	token, refreshToken, err = utils.GenerateAllTokens(foundUser.Email, foundUser.Name, foundUser.User_id)
 
 	if err != nil {
 		return
@@ -109,7 +109,6 @@ func Refresh_Token(c *gin.Context) (token string, refreshToken string, err error
 
 func EditPersonalData(c *gin.Context) error {
 	var userData models.User
-	email := c.PostForm("email") // Get the email from the request form data
 	// Bind the updated user data from the request body
 	if err := c.BindJSON(&userData); err != nil {
 		return err
@@ -122,12 +121,12 @@ func EditPersonalData(c *gin.Context) error {
 	userEmail := claims.(string)
 
 	// Ensure that the user making the request is authorized to edit their own data
-	if email != userEmail {
+	if userData.Email != userEmail {
 		return errors.New("unauthorized to edit data for this user")
 	}
 
 	// Check if the user with the provided email exists
-	existingUser, err := repository.GetUserByEmail(&email)
+	existingUser, err := repository.GetUserByEmail(userData.Email)
 	if err != nil {
 		return err
 	}
@@ -136,13 +135,13 @@ func EditPersonalData(c *gin.Context) error {
 	}
 
 	// Update the user's personal data
-	if userData.Name != nil {
+	if userData.Name != "" {
 		existingUser.Name = userData.Name
 	}
-	if userData.Number != nil {
+	if userData.Number != "" {
 		existingUser.Number = userData.Number
 	}
-	if userData.DateOfBirth != nil {
+	if userData.DateOfBirth != "" {
 		existingUser.DateOfBirth = userData.DateOfBirth
 	}
 
