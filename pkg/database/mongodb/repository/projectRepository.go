@@ -42,9 +42,14 @@ func UpdateProject(projectId int, updatedProject models.Project) error {
 	defer cancel()
 
 	filter := bson.M{"id": projectId}
+	oldOne, err := GetProjectByID(projectId)
+	if err != nil {
+		return err
+	}
+	updatedProject.Id = oldOne.Id
 	update := bson.M{"$set": updatedProject}
 
-	_, err := projectCollection.UpdateOne(ctx, filter, update)
+	_, err = projectCollection.UpdateOne(ctx, filter, update)
 	if err != nil {
 		return err
 	}
@@ -53,7 +58,7 @@ func UpdateProject(projectId int, updatedProject models.Project) error {
 }
 
 // Function that retrieves a project from the database by its custom ID
-func GetProjectByID(projectId string) (foundProject models.Project, err error) {
+func GetProjectByID(projectId int) (foundProject models.Project, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 
