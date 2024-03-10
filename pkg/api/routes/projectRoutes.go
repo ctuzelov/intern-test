@@ -8,6 +8,6 @@ import (
 )
 
 func ProjectRoutes(incomingRoutes *gin.Engine) {
-	incomingRoutes.POST("/create-project", handlers.CreateProject()).Use(middleware.Authenticate())
-	incomingRoutes.PUT("/update-project/:id", handlers.UpdateProject()).Use(middleware.IsAdmin())
+	incomingRoutes.POST("/create-project", middleware.Authenticate(), handlers.CreateProject())
+	incomingRoutes.PUT("/update-project/:id", middleware.IsAdmin(), handlers.UpdateProject())
 }
