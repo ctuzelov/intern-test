@@ -13,11 +13,6 @@ import (
 
 // Function that handles mongoDB connection
 func DBinstance() *mongo.Client {
-	/*err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading the .env file")
-	}
-	*/
 	MongoDb := os.Getenv("MONGODB_URL")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
@@ -38,6 +33,6 @@ func DBinstance() *mongo.Client {
 var Client *mongo.Client = DBinstance()
 
 func OpenCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-	var collection *mongo.Collection = client.Database("OrganizationManager").Collection(collectionName)
+	var collection *mongo.Collection = client.Database("test").Collection(collectionName)
 	return collection
 }
