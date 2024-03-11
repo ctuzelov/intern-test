@@ -30,3 +30,15 @@ func UpdateProject() gin.HandlerFunc {
 		c.JSON(http.StatusOK, gin.H{"message": "Project updated successfully"})
 	}
 }
+
+// Function that handles getting all projects
+func GetAllProjects() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		projects, err := controllers.GetAllProjects(c)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		c.JSON(http.StatusOK, projects)
+	}
+
+}

@@ -7,6 +7,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var userCollection *mongo.Collection = OpenCollection(Client, "user")
@@ -79,4 +80,35 @@ func UpdateUser(user models.User) error {
 	_, err := userCollection.UpdateOne(ctx, filter, update)
 
 	return err
+}
+
+// Function that returns all users from the database
+func GetAllUsers() (users []models.User, err error) {
+	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	defer cancel()
+
+	// Define options for the find operation
+	findOptions := options.Find()
+
+	// Perform the find operation to retrieve all user documents
+	cursor, err := userCollection.Find(ctx, bson.M{}, findOptions)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	// Iterate over the results and construct user objects
+	for cursor.Next(ctx) {
+		var user models.User
+		if err := cursor.Decode(&user); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }

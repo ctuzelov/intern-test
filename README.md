@@ -11,13 +11,16 @@
 ### User Profile
 
 - `POST /edit`: Update user profile.
+- `GET /get-users`: Get all users
 
 ### Project Management
 
 - `POST /create-project`: Create a new project.
+- `GET /get-projects`: Get all projects
 - `PUT /update-project/:id`: Update an existing project. Requires admin privileges.
 
 #### Admin data
+
 ```json
 {
   "email": "chingizkhan@gmail.com",

@@ -152,3 +152,11 @@ func EditPersonalData(c *gin.Context) error {
 
 	return nil
 }
+
+func GetAllUsers() ([]models.User, error) {
+	users, err := repository.GetAllUsers()
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}

@@ -68,3 +68,14 @@ func UpdateUser() gin.HandlerFunc {
 		c.JSON(http.StatusOK, gin.H{"message": "Personal data updated successfully"})
 	}
 }
+
+func GetAllUsers() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		users, err := controllers.GetAllUsers()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, users)
+	}
+}
