@@ -19,5 +19,5 @@ type Project struct {
 
 type ProjectCount struct {
 	Id     primitive.ObjectID `bson:"_id"`
-	Lastid *int               `bson:"id" json:"id"`
+	Lastid int                `bson:"last_id" json:"last_id"`
 }
